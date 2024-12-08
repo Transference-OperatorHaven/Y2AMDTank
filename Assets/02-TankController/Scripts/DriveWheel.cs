@@ -12,7 +12,6 @@ public class DriveWheel : MonoBehaviour
 	[SerializeField] private Suspension[] m_SuspensionWheels;
 	private int m_NumGroundedWheels;
 	private bool m_Grounded;
-
 	private float m_Acceleration;
 	public void SetAcceleration(float amount) => m_Acceleration = amount;
 
@@ -34,12 +33,15 @@ public class DriveWheel : MonoBehaviour
 	{
 		if (newGrounded)
 		{
+			if (m_NumGroundedWheels == 0) { m_Grounded = true; OnGroundedChanged?.Invoke(m_Grounded); }
 			m_NumGroundedWheels++;
+			
 		}
 		else
 		{
 			m_NumGroundedWheels--;
-		}
+            if (m_NumGroundedWheels == 0) { m_Grounded = false; OnGroundedChanged?.Invoke(m_Grounded); }
+        }
 	}
 
 	private void FixedUpdate()
@@ -48,5 +50,21 @@ public class DriveWheel : MonoBehaviour
 		//you could retrofit this to be a coroutine based on when SetAcceleration brings in a value or a 0
 		//TIP: acceleration is not as simple as plugging values in from the typeData, Unity works in metric units (metric tons, meters per second, etc)
 		//No need to make a full engine simulation with gearing here that is going too deep, you have a couple of weeks at most for this
+		
+		if(!m_Grounded) return;
+		int m_traction = m_NumGroundedWheels / m_SuspensionWheels.Length;
+		Vector3 m_velocity = m_traction * 7 * transform.forward * m_Acceleration;
+
+		Vector3 maxTurn = new Vector3(0, 2, 0);
+
+		if (m_RB.angularVelocity.y > maxTurn.y) { m_RB.angularVelocity = maxTurn; }
+		if (m_RB.angularVelocity.y < -maxTurn.y) { m_RB.angularVelocity = -maxTurn; }
+
+		m_RB.AddForceAtPosition(m_velocity, transform.position, ForceMode.Acceleration);
+		foreach(Suspension wheel in m_SuspensionWheels)
+		{
+			wheel.Bounce();
+		}
+		
 	}
 }

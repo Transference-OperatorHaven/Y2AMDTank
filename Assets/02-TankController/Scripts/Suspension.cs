@@ -27,6 +27,23 @@ public class Suspension : MonoBehaviour
 		return m_Grounded;
 	}
 
+	public void Bounce()
+	{
+        Vector3 springDirection = m_RB.transform.TransformDirection(Vector3.down);
+        if (Physics.Raycast(transform.position, springDirection, out RaycastHit hitInfo, m_SpringSize))
+        {
+            Vector3 worldVel = m_RB.GetPointVelocity(transform.position);
+
+            float susOffset = m_SpringSize - hitInfo.distance;
+
+            float susVel = Mathf.Abs(Vector3.Dot(worldVel, springDirection));
+
+            float susForce = (susOffset * m_Data.SuspensionStrength) - (susVel * m_Data.SuspensionDamper);
+
+            m_RB.AddForceAtPosition(-springDirection * susForce, transform.position, ForceMode.Acceleration);
+        }
+    }
+
 	private void FixedUpdate()
 	{
 		//start this function by using the StatefulRaycast2D from IMD to work out how to do a grounded check using the springSize as a length and fire the event when the value for grounded changes
@@ -35,5 +52,9 @@ public class Suspension : MonoBehaviour
 		//The tanks mass never changes either so is there any need to simulate forces in ForceMode.Force maybe ForceMode.Acceleration would keep the numbers smaller and easier to deal with????
 
 		//to stop the tank from sliding you also need to conssider how much velocity is in the left/right direction and counter it here
-	}
+		bool hit = Physics.Raycast(m_Wheel.transform.position, Vector3.down, m_SpringSize);
+        if (m_Grounded != hit) { m_Grounded = !m_Grounded; OnGroundedChanged?.Invoke(m_Grounded); }
+
+		
+    }
 }

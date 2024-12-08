@@ -31,7 +31,10 @@ public class TankController : MonoBehaviour
 		m_TurretController ??= GetComponent<Turret>();
 		m_TurretController.Init(m_Data);
 
-		foreach (DriveWheel wheel in m_DriveWheels)
+        m_BarrelController ??= GetComponent<Barrel>();
+        m_BarrelController.Init(m_Data);
+
+        foreach (DriveWheel wheel in m_DriveWheels)
 		{
 			wheel.Init(m_Data, m_RB);
 		}
@@ -91,6 +94,9 @@ public class TankController : MonoBehaviour
 
 		m_IsSteering = true;
 
+		/*m_DriveWheels[0].SetAcceleration(-m_InSteer);
+		m_DriveWheels[1].SetAcceleration(m_InSteer);*/
+
 		m_CRSteer = StartCoroutine(C_SteerUpdate());
 	}
 	private void Handle_SteerCanceled(InputAction.CallbackContext context)
@@ -101,19 +107,22 @@ public class TankController : MonoBehaviour
 
 		m_IsSteering = false;
 
-		StopCoroutine(m_CRSteer);
-	}
-	private IEnumerator C_SteerUpdate()
+        m_DriveWheels[0].SetAcceleration(m_InSteer);
+        m_DriveWheels[1].SetAcceleration(-m_InSteer);
+
+        StopCoroutine(m_CRSteer);
+    }
+    private IEnumerator C_SteerUpdate()
 	{
 		while (m_IsSteering)
 		{
-			// you could do a simple steering here with a transform.rotate
-			// or you can delete this coroutine and work out how to pass the steering value to each drivewheel as a positive or negative number to make the tank spin
+			m_DriveWheels[0].SetAcceleration(m_InSteer * 1.5f);
+			m_DriveWheels[1].SetAcceleration(-m_InSteer * 1.5f);
 			yield return null;
 		}
 	}
 
-	private void Handle_FirePerformed(InputAction.CallbackContext context)
+    private void Handle_FirePerformed(InputAction.CallbackContext context)
 	{
 		m_IsFiring = true;
 		m_BarrelController.Fire();
