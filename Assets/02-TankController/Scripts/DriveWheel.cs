@@ -33,14 +33,14 @@ public class DriveWheel : MonoBehaviour
 	{
 		if (newGrounded)
 		{
-			if (m_NumGroundedWheels == 0) { m_Grounded = true; OnGroundedChanged?.Invoke(m_Grounded); }
+			if (m_NumGroundedWheels == 0) { m_Grounded = true;  }
 			m_NumGroundedWheels++;
 			
 		}
 		else
 		{
 			m_NumGroundedWheels--;
-            if (m_NumGroundedWheels == 0) { m_Grounded = false; OnGroundedChanged?.Invoke(m_Grounded); }
+            if (m_NumGroundedWheels == 0) { m_Grounded = false;  }
         }
 	}
 
@@ -55,10 +55,12 @@ public class DriveWheel : MonoBehaviour
 		int m_traction = m_NumGroundedWheels / m_SuspensionWheels.Length;
 		Vector3 m_velocity = m_traction * 7 * transform.forward * m_Acceleration;
 
-		Vector3 maxTurn = new Vector3(0, 2, 0);
+		float maxTurn = 2;
 
-		if (m_RB.angularVelocity.y > maxTurn.y) { m_RB.angularVelocity = maxTurn; }
-		if (m_RB.angularVelocity.y < -maxTurn.y) { m_RB.angularVelocity = -maxTurn; }
+		if (m_RB.angularVelocity.y > maxTurn)
+		{ m_RB.angularVelocity = new Vector3(m_RB.angularVelocity.x, maxTurn, m_RB.angularVelocity.z); }
+		if (m_RB.angularVelocity.y < -maxTurn)
+		{ m_RB.angularVelocity = new Vector3(m_RB.angularVelocity.x, -maxTurn, m_RB.angularVelocity.z); }
 
 		m_RB.AddForceAtPosition(m_velocity, transform.position, ForceMode.Acceleration);
 		foreach(Suspension wheel in m_SuspensionWheels)
