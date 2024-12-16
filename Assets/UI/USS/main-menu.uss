@@ -1,0 +1,8 @@
+#root {
+    flex-grow: 1;
+}
+
+#menu {
+    align-items: center;
+    width: 48%;
+}
