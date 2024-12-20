@@ -1,3 +1,4 @@
+using PlasticGui.WorkspaceWindow.Locks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,11 +24,18 @@ public class CameraController : MonoBehaviour
 		float a = b.Remap360To180PN();
 		//you may want to limit the amount of change rather than after rotating so tha camera doesnt jitter. Refer to the healthComponent from C4E for the idea
 
+		m_SpringArmKnuckle.Rotate(Vector3.up, change.x, Space.World);
+
+		float pitch = m_SpringArmKnuckle.localEulerAngles.x.Remap360To180PN();
+		pitch = Mathf.Clamp(pitch - change.y, -30f, 45f);
+		m_SpringArmKnuckle.localRotation = Quaternion.Euler(pitch, m_SpringArmKnuckle.localEulerAngles.y, 0);
+
+
 	}
 
 	public void ChangeCameraDistance(float amount)
 	{
-		m_CameraDist += amount;
+		m_CameraDist = Mathf.Clamp(m_CameraDist + amount, 2f, 10f);
 		//probably want to constrain this value
 	}
 
@@ -35,7 +43,19 @@ public class CameraController : MonoBehaviour
 	{
 		//set the Knuckle to be the position of the tank plus the offset
 		//REMEMBER: this script is ON THE TANK. It is pulling the camera each frame
-
 		//Expand here by using a sphere trace from the tank backwards to see if the camera needs to move forward, out the way of geometry
+
+		m_SpringArmKnuckle.position = transform.position + m_TargetOffset;
+
+		Vector3 DesiredCamPos = m_SpringArmKnuckle.position - m_SpringArmKnuckle.forward * m_CameraDist;
+
+		RaycastHit hit; 
+		if(Physics.SphereCast(m_SpringArmKnuckle.position, 0.5f, -m_SpringArmKnuckle.forward, out hit, ))
+		{
+			m_CameraDist = hit.distance;
+		}
+
+		m_CameraMount.position = m_SpringArmKnuckle.position - m_SpringArmKnuckle.forward * m_CameraDist;
+		m_CameraMount.LookAt(m_SpringArmKnuckle.position);
 	}
 }

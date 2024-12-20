@@ -36,7 +36,7 @@ public class Suspension : MonoBehaviour
 
             float susOffset = m_SpringSize - hitInfo.distance;
 
-            float susVel = Mathf.Abs(Vector3.Dot(worldVel, springDirection));
+            float susVel = Vector3.Dot(worldVel, -springDirection.normalized);
 
             float susForce = (susOffset * m_Data.SuspensionStrength) - (susVel * m_Data.SuspensionDamper);
 
