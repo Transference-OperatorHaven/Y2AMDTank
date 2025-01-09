@@ -52,8 +52,8 @@ public class DriveWheel : MonoBehaviour
 		//No need to make a full engine simulation with gearing here that is going too deep, you have a couple of weeks at most for this
 		
 		if(!m_Grounded) return;
-		int m_traction = m_NumGroundedWheels / m_SuspensionWheels.Length;
-		Vector3 m_velocity = m_traction * 7 * transform.forward * m_Acceleration;
+		float m_traction = (float)m_NumGroundedWheels / (float)m_SuspensionWheels.Length;
+		Vector3 m_velocity = m_traction * transform.forward * m_Acceleration;
 
 		float maxTurn = 2;
 

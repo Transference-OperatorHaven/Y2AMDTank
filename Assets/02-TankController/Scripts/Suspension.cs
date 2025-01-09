@@ -1,3 +1,4 @@
+using Codice.CM.Common.Tree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,11 +37,14 @@ public class Suspension : MonoBehaviour
 
             float susOffset = m_SpringSize - hitInfo.distance;
 
-            float susVel = Vector3.Dot(worldVel, -springDirection.normalized);
+            float susVel = Vector3.Dot(worldVel, -springDirection);
 
-            float susForce = (susOffset * m_Data.SuspensionStrength) - (susVel * m_Data.SuspensionDamper);
+			Vector3 susForce = -springDirection * ((susOffset * m_Data.SuspensionStrength) - (susVel * m_Data.SuspensionDamper));
 
-            m_RB.AddForceAtPosition(-springDirection * susForce, transform.position, ForceMode.Acceleration);
+			float horizontalVel = Vector3.Dot(worldVel, transform.right);
+			Vector3 horizontalForce = m_Data.HorizontalDrag * -horizontalVel * transform.right;
+
+            m_RB.AddForceAtPosition(susForce + horizontalForce, transform.position, ForceMode.Acceleration);
         }
     }
 

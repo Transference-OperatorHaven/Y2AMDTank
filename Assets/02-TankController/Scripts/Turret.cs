@@ -34,6 +34,8 @@ public class Turret : MonoBehaviour
 		//TIP: simplfy the problem into 2D with the Vector3.ProjectOnPlane function and diagram it out. The turret rotates around the local y and the barrel around the local x
 		//Make use of the remap function as shown in Camera.cs to help
 		//extention here could include some SUVAT formula work to adjust the aim to hit where the camera is pointing, accounting for gravity
+
+
 		yield return null;
 	}
 }

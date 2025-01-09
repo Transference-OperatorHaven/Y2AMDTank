@@ -1143,12 +1143,12 @@ Transform:
   m_GameObject: {fileID: 577714981}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.7, z: -0.64}
+  m_LocalPosition: {x: 0, y: 6.3999996, z: -0.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 114474679}
-  m_Father: {fileID: 928874463}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &604312205
 GameObject:
@@ -2244,7 +2244,7 @@ MonoBehaviour:
   m_CameraMount: {fileID: 114474679}
   m_Camera: {fileID: 880163267}
   m_Data: {fileID: 11400000, guid: 0cbe95f8684787643be0124fc6b8eaf0, type: 2}
-  m_TargetOffset: {x: 0, y: 4, z: 0}
+  m_TargetOffset: {x: 0, y: 6, z: 0}
 --- !u!114 &928874461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2282,7 +2282,6 @@ Transform:
   - {fileID: 1013742092}
   - {fileID: 55085257}
   - {fileID: 1937698541}
-  - {fileID: 577714982}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &928874465
@@ -2309,7 +2308,7 @@ Rigidbody:
   m_GameObject: {fileID: 928874459}
   serializedVersion: 4
   m_Mass: 57020
-  m_Drag: 0
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0.7, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2339,7 +2338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a6ec596a35a7a46b6862bc038fc849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Data: {fileID: 0}
+  m_Data: {fileID: 11400000, guid: 116859067924452438fe04169eb456aa, type: 2}
   m_ShellPrefab: {fileID: 0}
   m_AmmoTypes: []
   m_AmmoCounts: 
@@ -4576,3 +4575,4 @@ SceneRoots:
   - {fileID: 122966975}
   - {fileID: 970418847}
   - {fileID: 414424484}
+  - {fileID: 577714982}
