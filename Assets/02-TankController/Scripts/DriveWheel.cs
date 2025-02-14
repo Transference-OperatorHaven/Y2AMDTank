@@ -53,9 +53,11 @@ public class DriveWheel : MonoBehaviour
 		
 		if(!m_Grounded) return;
 		float m_traction = (float)m_NumGroundedWheels / (float)m_SuspensionWheels.Length;
-		Vector3 m_velocity = m_traction * transform.forward * m_Acceleration;
+		float speed = m_Data.EngineData.HorsePower / m_Data.Mass_Tons;
 
-		float maxTurn = 2;
+        Vector3 m_velocity = m_traction * transform.forward * speed * m_Acceleration;
+
+		float maxTurn = speed*0.1f;
 
 		if (m_RB.angularVelocity.y > maxTurn)
 		{ m_RB.angularVelocity = new Vector3(m_RB.angularVelocity.x, maxTurn, m_RB.angularVelocity.z); }

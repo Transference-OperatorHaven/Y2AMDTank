@@ -30,7 +30,8 @@ public class CameraController : MonoBehaviour
 
         yaw = yaw.Remap360To180PN();
 
-        m_SpringArmKnuckle.rotation = Quaternion.Euler((pitch * change.x * m_Data.PitchSensitivity), (yaw * change.y * m_Data.YawSensitivity), 0) * m_SpringArmKnuckle.rotation;
+        m_SpringArmKnuckle.rotation = Quaternion.Euler(Vector3.up * (change.x * (m_Data.YawSensitivity / 1000))) * m_SpringArmKnuckle.rotation;
+        //m_SpringArmKnuckle.rotation = Quaternion.Euler((pitch + change.x * m_Data.PitchSensitivity), (yaw + change.y * m_Data.YawSensitivity), 0) * m_SpringArmKnuckle.rotation;
 
         m_SpringArmKnuckle.Rotate(Vector3.up, change.x, Space.World);
         m_SpringArmKnuckle.Rotate(Vector3.left, change.y, Space.World);
