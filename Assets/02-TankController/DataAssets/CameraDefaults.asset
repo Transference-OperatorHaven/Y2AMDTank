@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: CameraDefaults
   m_EditorClassIdentifier: 
   YawSensitivity: 1
-  PitchSensitivity: 1
+  PitchSensitivity: 0.3
   ZoomSensitivity: 1
-  MaxPitch: 30
-  MinPitch: 89
+  MaxPitch: 89
+  MinPitch: -40
   MaxDist: 10
   MinDist: 1
   CameraProbeSize: 0.5

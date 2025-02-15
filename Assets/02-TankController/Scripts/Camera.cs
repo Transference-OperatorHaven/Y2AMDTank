@@ -22,19 +22,17 @@ public class CameraController : MonoBehaviour
         //as you need to remap a (0 to 360) value into a (-180 to 180) value using the provided Remap function which is an extension of the float type
         //you may want to limit the amount of change rather than after rotating so tha camera doesnt jitter. Refer to the healthComponent from C4E for the idea
 
+
+        m_SpringArmKnuckle.rotation = Quaternion.Euler(Vector3.up * (change.x * m_Data.YawSensitivity)) * m_SpringArmKnuckle.rotation;
+
         float pitch = m_SpringArmKnuckle.rotation.eulerAngles.x;
-        float yaw = m_SpringArmKnuckle.rotation.eulerAngles.y;
 
-        pitch = pitch.Remap360To180PN();
-        pitch = Mathf.Clamp(pitch, m_Data.MinPitch, m_Data.MaxPitch);
+        pitch = pitch > 180f ? pitch.Remap360To180PN() : pitch;
 
-        yaw = yaw.Remap360To180PN();
+        float newPitch = Mathf.Clamp(pitch + (change.y * m_Data.PitchSensitivity), m_Data.MinPitch, m_Data.MaxPitch) - pitch;
 
-        m_SpringArmKnuckle.rotation = Quaternion.Euler(Vector3.up * (change.x * (m_Data.YawSensitivity / 1000))) * m_SpringArmKnuckle.rotation;
+        m_SpringArmKnuckle.rotation *= Quaternion.Euler(Vector3.right * newPitch);
         //m_SpringArmKnuckle.rotation = Quaternion.Euler((pitch + change.x * m_Data.PitchSensitivity), (yaw + change.y * m_Data.YawSensitivity), 0) * m_SpringArmKnuckle.rotation;
-
-        m_SpringArmKnuckle.Rotate(Vector3.up, change.x, Space.World);
-        m_SpringArmKnuckle.Rotate(Vector3.left, change.y, Space.World);
 
     }
 

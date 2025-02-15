@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Turret : MonoBehaviour
 {
@@ -46,8 +47,8 @@ public class Turret : MonoBehaviour
 		{
             Vector3 turretProjVec = Vector3.ProjectOnPlane(m_CameraMount.transform.forward, transform.up);
             Vector3 barrelProjVec = Vector3.ProjectOnPlane(m_CameraMount.transform.forward, transform.forward);
-			
-			Quaternion TurretTargetRot = Quaternion.LookRotation(turretProjVec, m_Turret.transform.parent.up);
+
+            Quaternion TurretTargetRot = Quaternion.LookRotation(turretProjVec, m_Turret.transform.parent.up);
             Quaternion BarrelTargetRot = Quaternion.LookRotation(barrelProjVec, m_Turret.transform.parent.forward);
 
             Debug.DrawLine(m_Turret.transform.position, transform.position + turretProjVec * 25f, Color.blue);
@@ -55,11 +56,14 @@ public class Turret : MonoBehaviour
 
 			m_Turret.transform.rotation = Quaternion.RotateTowards(m_Turret.transform.rotation, TurretTargetRot, m_Data.TurretData.TurretTraverseSpeed * Time.deltaTime);
 
-			Quaternion barrelRotateTowards = Quaternion.RotateTowards(m_Barrel.transform.rotation, BarrelTargetRot, m_Data.TurretData.BarrelTraverseSpeed * Time.deltaTime);
-			Vector3 eulerBarrelRot = barrelRotateTowards.eulerAngles;
-			m_Barrel.localEulerAngles = new Vector3(eulerBarrelRot.x, 0,0);
+			Quaternion barrelRotateTowards = Quaternion.RotateTowards(m_Barrel.transform.rotation, BarrelTargetRot, m_Data.TurretData.BarrelTraverseSpeed);
+            Vector3 eulerBarrelRot = barrelRotateTowards.eulerAngles;
+            if (eulerBarrelRot.x > 180f) { eulerBarrelRot.x -= 360f; }
+            eulerBarrelRot.x = Mathf.Clamp(eulerBarrelRot.x, -m_Data.TurretData.ElevationLimit, m_Data.TurretData.DepressionLimit);
+            m_Barrel.localEulerAngles = new Vector3(eulerBarrelRot.x, 0, 0);
 
-			if(m_Turret.transform.rotation == TurretTargetRot && m_Barrel.transform.rotation.y == BarrelTargetRot.y)
+
+            if (m_Turret.transform.rotation == TurretTargetRot && m_Barrel.transform.rotation.x == BarrelTargetRot.x)
 			{
 				m_RotationDirty = true;
 			}
