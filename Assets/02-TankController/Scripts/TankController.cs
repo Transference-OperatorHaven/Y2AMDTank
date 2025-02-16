@@ -104,10 +104,14 @@ public class TankController : MonoBehaviour
 
 		m_IsSteering = true;
 
+		m_TurretController.SetRotationDirty();
+
 		/*m_DriveWheels[0].SetAcceleration(-m_InSteer);
 		m_DriveWheels[1].SetAcceleration(m_InSteer);*/
 
 		m_CRSteer = StartCoroutine(C_SteerUpdate());
+
+
 	}
 	private void Handle_SteerCanceled(InputAction.CallbackContext context)
 	{
@@ -116,6 +120,8 @@ public class TankController : MonoBehaviour
 		if (!m_IsSteering) return;
 
 		m_IsSteering = false;
+
+        m_TurretController.SetRotationDirty();
 
         m_DriveWheels[0].SetAcceleration(m_InSteer);
         m_DriveWheels[1].SetAcceleration(-m_InSteer);
