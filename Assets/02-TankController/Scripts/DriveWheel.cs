@@ -12,7 +12,7 @@ public class DriveWheel : MonoBehaviour
 	[SerializeField] private Suspension[] m_SuspensionWheels;
 	private int m_NumGroundedWheels;
 	private bool m_Grounded;
-	private float m_Acceleration;
+	public float m_Acceleration;
 	public void SetAcceleration(float amount) => m_Acceleration = amount;
 
 	public void Init(TankSO inData, Rigidbody _RBRef)

@@ -7,4 +7,5 @@ public class ShellSO : ScriptableObject
 {
 	public float Damage;
 	public float Velocity;
+	public int maxAmmo;
 }

@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class Shell : MonoBehaviour
 {
-	//this is for your projectile, let unity physics deal with most of it for you but do use an interface and some custome logic for dealing damage with different shell types and impact normals etc
-	//to prove this works chuck a health component on a target and shoot it
+    [SerializeField] private TankSO m_Data;
+    [SerializeField] private Rigidbody m_RB;
+    private ShellSO m_Shell;
+    private void Awake()
+    {
+        m_RB = GetComponent<Rigidbody>();
+        Destroy(gameObject, 10f);
+    }
+
+    public void LaunchShell(ShellSO shellData)
+    {
+        m_Shell = shellData;
+        m_RB.AddForce(transform.forward * shellData.Velocity, ForceMode.Impulse);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            TankController enemyTank = collision.gameObject.GetComponent<TankController>();
+            if (enemyTank) enemyTank.DamageTank(m_Shell.Damage); 
+        }
+        Destroy(gameObject);
+    }
 }

@@ -11,19 +11,22 @@ public class TankController : MonoBehaviour
 	[SerializeField] private CameraController m_CameraController;
 	[SerializeField] private Turret m_TurretController;
 	[SerializeField] private Barrel m_BarrelController;
-	[SerializeField] private DriveWheel[] m_DriveWheels;
+	[SerializeField] private TankUI m_UIController;
+	[SerializeField] public DriveWheel[] m_DriveWheels;
 
 	private float m_InAccelerate;
 
 	private float m_InSteer;
 	private bool m_IsSteering;
 	private Coroutine m_CRSteer;
-
+	public float m_CurrentHealth;
 	private bool m_IsFiring;
 
 	private void Awake()
 	{
 		m_ActionMap = new AM_02Tank();
+
+		m_CurrentHealth = m_Data.Health;
 
 		m_RB ??= GetComponent<Rigidbody>();
 		m_CameraController ??= GetComponent<CameraController>();
@@ -34,10 +37,17 @@ public class TankController : MonoBehaviour
         m_BarrelController ??= GetComponent<Barrel>();
         m_BarrelController.Init(m_Data);
 
+		m_UIController.Init(this);
+
         foreach (DriveWheel wheel in m_DriveWheels)
 		{
 			wheel.Init(m_Data, m_RB);
 		}
+	}
+
+	public TankSO getData()
+	{
+		return m_Data;
 	}
 
 	private void OnEnable()
@@ -143,5 +153,11 @@ public class TankController : MonoBehaviour
 	{
 		m_CameraController.ChangeCameraDistance(context.ReadValue<float>());
 		m_TurretController.SetRotationDirty();
+	}
+
+	public void DamageTank(float damage)
+	{
+        m_CurrentHealth -= damage;
+		if (m_CurrentHealth <= 0) { Destroy(gameObject); }	
 	}
 }
